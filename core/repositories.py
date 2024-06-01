@@ -32,18 +32,18 @@ class UserRepository(models.Manager):
 
 class AdminRepository(models.Manager):
 
-	def create_admin(self, first_name: str, last_name: str, email: str, password: str):
+	def create_admin(self, first_name: str, last_name: str, email: str, password: str, **kwargs):
 		from core.models import User
-		user = User.objects.create_user(first_name, last_name, email, password, is_admin=True)
+		user = User.objects.create_user(first_name, last_name, email, password, is_admin=True, **kwargs)
 		return self.create(user=user)
 
 
 class StaffRepository(models.Manager):
 	...
 
-	def create_staff(self, first_name: str, last_name: str, email: str, password: str):
+	def create_staff(self, first_name: str, last_name: str, email: str, password: str, **kwargs):
 		from core.models import User
-		user = User.objects.create_user(first_name, last_name, email, password, is_staff=True)
+		user = User.objects.create_user(first_name, last_name, email, password, is_staff=True, **kwargs)
 		return self.create(user=user)
 
 	def random_staffs(self, number: int):
@@ -53,7 +53,7 @@ class StaffRepository(models.Manager):
 
 
 class CustomerRepository(models.Manager):
-	def create_customer(self, first_name: str, last_name: str, email: str, password: str):
+	def create_customer(self, first_name: str, last_name: str, email: str, password: str, **kwargs):
 		from .models import User
-		user = User.objects.create_user(first_name, last_name, email, password, is_customer=True)
+		user = User.objects.create_user(first_name, last_name, email, password, is_customer=True, **kwargs)
 		return self.create(user=user)

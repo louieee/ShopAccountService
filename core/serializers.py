@@ -13,12 +13,13 @@ class Login(serializers.Serializer):
 
 		return attrs
 
+
 class Signup(serializers.ModelSerializer):
 	user_type = serializers.ChoiceField(choices=["admin", "staff", "customer"])
 
 	class Meta:
 		model = User
-		fields = ("first_name", "last_name", "email", "password", "user_type")
+		fields = ("first_name", "last_name", "email", "gender", "date_of_birth", "password", "user_type")
 
 	def signup(self):
 		create_function_switch = dict(admin=Admin.objects.create_admin,
@@ -45,7 +46,6 @@ class UserProfile(serializers.ModelSerializer):
 		elif obj.user.is_customer:
 			return "Customer"
 		return None
-
 
 	@staticmethod
 	def custom_update(self, instance, validated_data, serializer):
@@ -80,3 +80,15 @@ class AdminProfile(UserProfile):
 
 	def update(self, instance, validated_data):
 		return self.custom_update(self, instance, validated_data, self.__class__)
+
+
+class UserSerializer(serializers.ModelSerializer):
+	profile_pic = serializers.SerializerMethodField()
+
+	class Meta:
+		model = User
+		fields = ("id", "first_name", "last_name", "email", "is_customer", "is_admin", "is_staff", "display_name",
+		          "profile_pic", "gender", "date_of_birth")
+
+	def get_profile_pic(self, obj):
+		return obj.get_profile_pic
